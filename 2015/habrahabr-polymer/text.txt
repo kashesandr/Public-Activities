@@ -43,33 +43,39 @@ https://learn.javascript.ru/webcomponentsъ
 # Polymer
 
 Тем временем Google решил всё упрощать и развивать. Судя по истории коммитов на github, работа началась осенью 2012 года. Они взяли веб компоненты, полифилы и создали еще одну надстройку над всем этим.
+Цель Polymer (со слов product manager'а) - упростить создание качественных веб-приложений.
 
 ## Polymer - коротко что это
 Полимер из себя представляет те же вебкомпоненты в основе (shadow dom, custom elements, html imports, templates), полифилы для поддержки неподдерживающих браузеров, все обернуто в целостную более удобную экосистему. А на основе этого Google создал набор примеров переиспользуемых компонентов. Разбили их на части:
  - Iron elements (основные строительные блоки)
  - Paper elements (готовые переиспользуемые элементы на основе iron-elements и material design)
- - Google web components (коллекция веб компонентов, использующих различные API Google. Например: google-maps,google-youtube)
+ - Google web components (коллекция веб компонентов, использующих различные API Google. Например: maps, youtube, drive)
  - Gold elements (элементы специфичные для интернет-коммерции, например input-element для валидации кредитной карты)
  - Neon elements (элементы для создания анимаций)
  - Platinum elements (элементы помогабщие создать из веб-страницы настоящее веб приложение, например push-нотификации, использование offline версии, bluetooth)
  - Molecules (элементы-обёртки других библиотек/приложений, для более простого использования)
 На конференции Google IO 2015 в мае 2015 анонсировали версию 1.0.
-Докладчики часто повторяли фразу "there is an element for that" - это как слоган. ???
+Когда вы создаёте приложение у вас есть полный список строительных блоков. С какой проблемой бы вы не столкнулись - для её решения есть элемент. "there is an element for that" - звучит как слоган в докладах Google IO 2015.
 Философия в том что всё - это элементы. Даже ajax запрос.
 ?пример запроса
+?elements.polymer.com - каталог. "there is an element for that"
+
 Polymer - это не фреймворк. Это обёртка и сахар. Я бы сравнил его с библиотекой jQuery. Но jQuery создана для работы с DOM, а Polymer для работы с web components.
 
 ## Polymer - тестируемость
 Да, он тестируемый и для этого создана отдельная утилита https://github.com/Polymer/web-component-tester
 
 ## Polymer - примеры работ
+https://translate.google.com/
+https://play.google.com/music/listen#/sulp
 http://todomvc.com/examples/polymer/index.html
+https://santatracker.google.com/
+
 Anonymous chat http://pubnub.github.io/paper-chat/ + src
 home assistant https://home-assistant.io/demo/ + src
 
-## Polymer - альтернативы
-http://bosonic.github.io/
-http://x-tags.org/
+## Polymer - поддержка браузерами
+У меня так и не получилось запустить на старом андроид-телефоне
 
 ## Polymer - производительность
 Polymer.js performance on mobile platforms can often be somewhere between frustrating and problematic.
@@ -77,8 +83,12 @@ Polymer.js performance on mobile platforms can often be somewhere between frustr
 ## Polymer - vulcanize
 HTML imports feature -> into a single file
 
-## Polymer - поддержка браузерами
-У меня так и не получилось запустить на старом андроид-телефоне
+## Polymer - starter kit
+???
+
+## Polymer - альтернативы
+http://bosonic.github.io/
+http://x-tags.org/
 
 ## Polymer - почитать
 https://www.youtube.com/watch?v=fD2As5RmM8Q
