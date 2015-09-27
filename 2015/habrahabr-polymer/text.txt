@@ -29,49 +29,6 @@
 
 На самом деле, некое подобие вебкомпонент уже было создано давно. Простейший пример - элемент <select>. Для него есть отдельный тег. Взаимодействуя с элементом, появляется выпадающий список и эта логика скрыта от нас, к тому же у него есть свои собственные стили. В этом и есть суть вебкомпонентов - создание простых и понятных элементов со скрытой логикой, стилями и которые не зависимы от внешнего окружения.
 Так же с HTML5 элементом <video> или <audio>.
-Пример веб-компонентов:
-
-(прример взят отсюда и немного обработан https://github.com/webcomponents/hello-world-element/blob/master/hello-world.htmlhttps://github.com/webcomponents/hello-world-element/blob/master/hello-world.html)
-<template>
-    <p>Hello <strong></strong> :)</p>
-</template>
-<script>
-(function(window, document, undefined) {
-    var thatDoc = document;
-    var thisDoc =  (thatDoc._currentScript || thatDoc.currentScript).ownerDocument;
-    var template = thisDoc.querySelector('template').content;
-    var MyElementProto = Object.create(HTMLElement.prototype);
-    MyElementProto.who = 'World';
-    MyElementProto.createdCallback = function() {
-        var shadowRoot = this.createShadowRoot();
-        var clone = thatDoc.importNode(template, true);
-        shadowRoot.appendChild(clone);
-        this.strong = shadowRoot.querySelector('strong');
-        if (this.hasAttribute('who')) {
-            var who = this.getAttribute('who');
-            this.setWho(who);
-        }
-        else {
-            this.setWho(this.who);
-        }
-    };
-    MyElementProto.attributeChangedCallback = function(attr, oldVal, newVal) {
-        if (attr === 'who') {
-            this.setWho(newVal);
-        }
-    };
-    MyElementProto.setWho = function(val) {
-        this.who = val;
-        this.strong.textContent = this.who;
-    };
-    window.MyElement = thatDoc.registerElement('hello-world', {
-        prototype: MyElementProto
-    });
-})(window, document);
-</script>
-Используем как:
-Подключаем в <head> -> <link rel="import" href="hello-world.html">
-Используем на странице (в <body>) -> <hello-world who="Unicorn"></hello-world>
 
 Наверняка, многие подключали в проект Bootstrap - для этого нужно отдельно прописать подгрузку стилей и скриптов. С компонентами это можно сделать проще:
 [code]<link rel="import" href="bootstrap.html"></link>[/code]
@@ -110,17 +67,94 @@ http://webcomponents.org/
 Как Вы могли заметить, постоянно фигурирует слово "элемент". Это не спроста - гугл считает, что для всего есть элементы. "There is an element for that" - звучит как слоган в докладах Google IO 2015 (доклад https://www.youtube.com/watch?t=5&v=fD2As5RmM8Q кстати интересно, советую посмотреть). Да, даже для ajax запроса есть элемент.
 Выглядит он вот так:
 <iron-ajax
-      id="ajax"
-      url=""
-      handle-as="json"
-      on-response="hresponse"
-      debounce-duration="300">
-  </iron-ajax>
+  id="ajax"
+  url=""
+  handle-as="json"
+  on-response="hresponse"
+  debounce-duration="300">
+</iron-ajax>
 
 Получается, что при создании приложения мы сталкиваемся постоянно с примерно одинаковыми задачами и Гугл предоставляет набор готовых строительных блоков для этого. С какой проблемой бы мы не столкнулись - для её решения есть элемент. "There is an element for that".
 Есть даже каталог готовых Polymer-компонентов elements.polymer.com.
 
 Polymer - это не фреймворк, так же как Web Components - не фреймворк. Polymer - это обёртка и сахар. Я бы идейно ее сравнил с jQuery. Но jQuery создана для работы с DOM, а Polymer для работы с Web Components.
+
+Пример веб-компонентов:
+
+<template>
+    <span id="multiplier"></span> * <span id="multiplicand"></span> = <span id="result"></span>
+</template>
+
+<script>
+
+    (function(window, document) {
+        var ownerDocument =  (document._currentScript || document.currentScript).ownerDocument;
+        var template = ownerDocument.querySelector('template').content;
+        var elementPrototype = Object.create(HTMLElement.prototype);
+
+        var multiplier = 0, multiplicand = 0, result = 0;
+
+        elementPrototype.createdCallback = function() {
+            var shadowRoot = this.createShadowRoot();
+            var clone = document.importNode(template, true);
+            shadowRoot.appendChild(clone);
+
+            this.multiplier = shadowRoot.querySelector('#multiplier');
+            this.multiplicand = shadowRoot.querySelector('#multiplicand');
+            this.result = shadowRoot.querySelector('#result');
+
+            this.calculate();
+        };
+
+        elementPrototype.attributeChangedCallback = function(attr, oldVal, newVal) {
+            this.calculate();
+        };
+
+        elementPrototype.calculate = function(){
+            multiplier = parseFloat( this.getAttribute('multiplier') );
+            multiplicand = parseFloat( this.getAttribute('multiplicand') );
+            this.multiplier.textContent = multiplier;
+            this.multiplicand.textContent = multiplicand;
+            this.result.textContent = multiplicand*multiplier;
+        };
+        window.MyElement = document.registerElement('element-multiplier', {prototype: elementPrototype });
+    })(window, document);
+
+</script>
+
+Подключаем в <head> -> <link rel="import" href="element-multiplier.html">
+Используем на странице (в <body>) -> <element-multiplier multiplier="3" multiplicand="2"></element-multiplier>
+
+Пример выше про умножение чисел на Polymer будет выглядеть значительно понятней и проще:
+
+<link rel="import" href="polymer.html">
+
+<dom-module id="element-multiplier">
+    <template>
+        <span>{{multiplier}}</span> * <span>{{multiplicand}}</span> = <span>{{result}}</span>
+    </template>
+</dom-module>
+
+<script>
+    Polymer({
+        is: "element-multiplier",
+        properties: {
+            "multiplier"    : { type: Number, value: 0, observer: 'calculate' },
+            "multiplicand"  : { type: Number, value: 0, observer: 'calculate' },
+            "result"        : { type: Number, value: 0 }
+        },
+        ready: this.calculate,
+        calculate: function(){
+            this.result = this.multiplier*this.multiplicand;
+        }
+    });
+</script>
+
+Подключаем в <head> -> <link rel="import" href="element-multiplier.html">
+Используем на странице (в <body>) -> <element-multiplier multiplier="3" multiplicand="2"></element-multiplier>
+
+В обоих случаяъ, если нужна поддержка устаревших браузеров - в <head> подключаются полифиллы:
+<script src="webcomponents.min.js"></script>
 
 ## Polymer - тестируемость
 Да, он тестируемый и для этого создана отдельная утилита https://github.com/Polymer/web-component-tester
@@ -137,7 +171,7 @@ Polymer.js performance on mobile platforms can often be somewhere between frustr
 HTML imports позволяет быстро и удобно подключить документ в другой документ, но в этом удобстве скрывается и проблема производительности - для полной подгрузки документ создаются множество хттп-запросов. Ведь HTML imports может быть вложенным. Решение есть - соединиить все подключаемые файлы в один. Для этого есть утилита vulcanize.
 
 ## Polymer - starter kit
-???
+Google разработал ...
 
 ## Polymer - альтернативы
 Есть альтернативы:
@@ -153,7 +187,7 @@ http://www.pubnub.com/blog/creating-a-polymer-chat-app-with-material-design/ (en
 
 Официальный представитель Sebastian Markbage (https://twitter.com/sebmarkbage) от React говорит, что не будут использовать Web Components совместно с React, т.к. они идеологически разные (декларативный реакт против императивных вебкомпонентов): https://docs.google.com/document/d/1QZxArgMwidgCrAbuSikcB2iBxkffH6w0YB0C1qCsuH0/edit (english)
 
-Однако Реакт и Вебкомпоненты совместимы, в некоторых случаях есть преимущества: https://www.youtube.com/watch?v=g0TD0efcwVghttps://www.youtube.com/watch?v=g0TD0efcwVg (english)
+Однако, Реакт и Вебкомпоненты совместимы, в некоторых случаях есть преимущества: https://www.youtube.com/watch?v=g0TD0efcwVghttps://www.youtube.com/watch?v=g0TD0efcwVg (english)
 
 Backbone & Web Components
 Удобно использовать уже готовые компоненты (Polymer, X-Tags, Bosonic). Используются точно так же как и обычные DOM-элементы. Надо быть осторожным, т.к. поддерживается не всеми браузерами: http://webcomponents.org/presentations/webcomponents-plus-backbone-a-game-changing-combination-at-backbone-conf/ (english)

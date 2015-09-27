@@ -1,0 +1,22 @@
+<link rel="import" href="polymer.html">
+
+<dom-module id="element-multiplier">
+    <template>
+        <span>{{multiplier}}</span> * <span>{{multiplicand}}</span> = <span>{{result}}</span>
+    </template>
+</dom-module>
+
+<script>
+    Polymer({
+        is: "element-multiplier",
+        properties: {
+            "multiplier"    : { type: Number, value: 0, observer: 'calculate' },
+            "multiplicand"  : { type: Number, value: 0, observer: 'calculate' },
+            "result"        : { type: Number, value: 0 }
+        },
+        ready: this.calculate,
+        calculate: function(){
+            this.result = this.multiplier*this.multiplicand;
+        }
+    });
+</script>
