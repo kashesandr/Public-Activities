@@ -33,8 +33,6 @@
 Наверняка, многие подключали в проект Bootstrap - для этого нужно отдельно прописать подгрузку стилей и скриптов. С компонентами это можно будет сделать проще:
 [code]<link rel="import" href="bootstrap.html"></link>[/code]
 
-И наконец-то можно будет подключать google analytics без лишнего кода, например так:
-[code]<google-analytics code="UA-XXXXX-Y"></google-analytics>[/code]
 Web components - не фреймворк. Это набор технологий, реализованных на уровне браузера.
 
 ## web components - поддержка браузерами и полифилы
@@ -162,42 +160,41 @@ Polymer - это не фреймворк, так же как Web Components - н
 <script src="webcomponents.min.js"></script>
 
 ## Polymer - тестируемость
-Да, он тестируемый и для этого создана отдельная утилита https://github.com/Polymer/web-component-tester
-? какие-то подробности
+Да, он тестируемый и для этого создана отдельная утилита (https://github.com/Polymer/web-component-tester). Достаточно понятное описание. Пробовал настроить - работает.
 
 ## Polymer - поддержка браузерами
 У меня так и не получилось запустить на старом андроид-телефоне
-? подробности
+<вставить табличку отсюда https://github.com/WebComponents/webcomponentsjs#browser-support>
 
-## Polymer - производительность
-Polymer.js performance on mobile platforms can often be somewhere between frustrating and problematic.
-
-## Polymer - vulcanize
-HTML imports позволяет быстро и удобно подключить документ в другой документ, но в этом удобстве скрывается и проблема производительности - для полной подгрузки документ создаются множество хттп-запросов. Ведь HTML imports может быть вложенным. Решение есть - соединиить все подключаемые файлы в один. Для этого есть утилита vulcanize.
+## Polymer - оптимизация vulcanize
+HTML imports позволяет быстро и удобно подключить документ в другой документ, но в этом удобстве скрывается и проблема производительности - создается большое множество http-запросов. Решение есть - соединиить все подключаемые файлы в один. Для этого нужна утилита vulcanize (https://github.com/polymer/vulcanize).
+Установка: `npm install -g vulcanize`
+Использование: `vulcanize index.html > build.html`
 
 ## Polymer - starter kit
-Google разработал ...
+Для удобства создана утилита (https://github.com/PolymerElements/polymer-starter-kit). После установки доступно множество полезной функциональности.
 
 ## Polymer - альтернативы
-Есть альтернативы:
+Polymer - это лишь надстройка над Web Components. Есть и другие подобные продукты:
 http://bosonic.github.io/
 http://x-tags.org/ (с поддержкой IE9)
 
-## Polymer - почитать
+## Polymer - еще почитать
 https://www.youtube.com/watch?v=fD2As5RmM8Q (english) - еще раз ссылка на выступление с Google IO 2015
+https://aerotwist.com/blog/polymer-for-the-performance-obsessed/ (english)
 http://www.pubnub.com/blog/creating-a-polymer-chat-app-with-material-design/ (english)
 
 ## Что еще, что дальше?
 Вебкомпоненты будут внедрены в Angular 2: http://angularjs.blogspot.ru/2015/03/announcements-from-ng-conf-were.html (english)
 
-Официальный представитель Sebastian Markbage (https://twitter.com/sebmarkbage) от React говорит, что не будут использовать Web Components совместно с React, т.к. они идеологически разные (декларативный реакт против императивных вебкомпонентов): https://docs.google.com/document/d/1QZxArgMwidgCrAbuSikcB2iBxkffH6w0YB0C1qCsuH0/edit (english)
+Официальный представитель от React Sebastian Markbage (https://twitter.com/sebmarkbage) говорит, что они не будут использовать Web Components совместно с React, т.к. они идеологически разные (декларативный реакт против императивных вебкомпонентов): https://docs.google.com/document/d/1QZxArgMwidgCrAbuSikcB2iBxkffH6w0YB0C1qCsuH0/edit (english)
 
 Однако, Реакт и Вебкомпоненты совместимы, в некоторых случаях есть преимущества: https://www.youtube.com/watch?v=g0TD0efcwVghttps://www.youtube.com/watch?v=g0TD0efcwVg (english)
 
 Backbone & Web Components
-Удобно использовать уже готовые компоненты (Polymer, X-Tags, Bosonic). Используются точно так же как и обычные DOM-элементы. Надо быть осторожным, т.к. поддерживается не всеми браузерами: http://webcomponents.org/presentations/webcomponents-plus-backbone-a-game-changing-combination-at-backbone-conf/ (english)
+Удобно скрестить с уже готовыми компонентами (Polymer, X-Tags, Bosonic). Используются точно так же как и обычные html-элементы. http://webcomponents.org/presentations/webcomponents-plus-backbone-a-game-changing-combination-at-backbone-conf/ (english)
 
-## Polymer - примеры работ
+## Polymer - примеры
 https://translate.google.com/
 https://play.google.com/music/listen#/sulp
 http://todomvc.com/examples/polymer/index.html
@@ -205,10 +202,6 @@ https://santatracker.google.com/
 http://pubnub.github.io/paper-chat/ - anonymous chat
 https://home-assistant.io/demo/ - home assist
 
-http://github.com/kashesandr/CIC - моя небольшая работа. Идея приложения проста: когда группа людей делают совместную покупку (будь то подарок на день рождения или выход в лес на шашлык) то, часто возникает проблема - все путаются в расчётах долгов. Писать на том, что уже изучены было скучно. Решил попробовать Полимер.
+http://github.com/kashesandr/CIC - моё маленькое приложение. Идея проста: когда группа людей делают совместную покупку с одинаковыми вкладами, то часто возникает путаница в расчётах долгов, когда скидываются не все сразу. Писал было специально для того, чтобы попробовать Polymer. Там есть рабочий пример тестов и vulcanize.
 
-# Если есть ошибки - пишите личным сообщением. Спасибо!
-
-
-http://www.pubnub.com/blog/creating-a-polymer-chat-app-with-material-design/
-
+# Если есть ошибки или дополнения - пишите личным сообщением. Спасибо!
