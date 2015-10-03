@@ -1,1 +1,2 @@
-# My presentations
+# My public activities
+Presentations, articles, ...
