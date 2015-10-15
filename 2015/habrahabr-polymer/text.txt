@@ -1,0 +1,230 @@
+Вебкомпоненты -> Polymer 1.0 -> Пример
+
+# Введение
+
+Хочется поделиться с сообществом своими знаниями и опытом. Думаю, будет полезно.
+
+## Кто я
+Я - Александр Кашеверов, веб-разработчик, работаю в компании DataArt с 2011 года.
+
+## О чём статья
+Статья про веб-комоненты и Polymer.
+
+## Вступление
+Веб постоянно развивается. Технологии для веба были придуманы и внедрены исходя из потребностей, актуальных на момент создания. Десять лет назад невозможно было сделать то, что мы реализуем сейчас, сложно представить что будет еще через 19 лет..
+Бизнес сейчас требует создания крупных программных веб-продуктов с широкой функциональностью, красотой, высокой производительностью. И бизнес готов вкладывать в это деньги. Однако, сложные и крупные решения в WEB делать непросто из-за специфичности технологий. Чтобы уменьшить сложность продукта, его разделяют на множество более простых частей. Компонентный подход позволяет вести разработку отдельных частей продукта независимо друг от друга и повторно использовать уже готовые. Для нас в контексте веба необходимо чтобы:
+ 1. CSS не пересекался.
+ 2. Области видимости JS не пересекались.
+ 3. HTML был понятным и читаемым. Никаких лишних элементов.
+В настоящее время это не совсем так. Относительно JavaScript: приходится следить, чтобы он не работал в global scope и разные компоненты случайно не взаимодействовали друг с другом. В CSS нет и не было инкапсуляции, приходится придумывать методологии вроде https://operatino.github.io/MCSS и https://bem.info, чтобы в ничего лишний раз не сломалось. И наконец, в HTML можно увидеть множество излишних элементов на странице, например даже сейчас в почте gmail: <img src="assets/a-lot-of-divs.png">.
+Фреймворки в той или иной степени внедряют компонентизацию и пытаются решить эти задачи. Angular, к примеру, даёт возможность создавать директивы с изолированной логикой. Даже CSS в Angular можно псевдоинкапсулировать (https://github.com/Yappli/angular-css-injector).
+
+# Web Components - коротко
+
+WEB медленно, но верно движется к компонентизации - это естесственный процесс. Всё сложное можно упростить, разбив на более простые части. Набирают популярность веб компоненты. Написано уже много статей на (http://habrahabr.ru/post/210058/) эту (http://habrahabr.ru/post/210130/) тему (http://habrahabr.ru/company/microsoft/blog/264791/). Это реализация идеи компонентизации на уровне браузера.
+Веб компоненты начали свою историю в 2011 году (первое упоминание на github https://github.com/w3c/webcomponents/commit/4a2e2daa58222b97e3cb7791f10022b7d9dedd4d). Кратко что это:
+- Custom Elements (создание своих html элементов, дополнение существующих)
+- Shadow DOM (инкапсуляция логики и стилей)
+- Templates (создание шаблонов)
+- HTML imports (вместо отдельного подключения разных типов файлов [css, js, ..] - можно подключать один HTML документ, включающий все остальные файлы)
+Соединяя эти 4 технологии вместе получаются автономные пеереиспользуемые блоки - веб компоненты.
+
+На самом деле, некое подобие вебкомпонент уже было создано давно. Простейший пример - элемент <select>. Для него есть отдельный тег. Взаимодействуя с элементом, появляется выпадающий список и эта логика скрыта от нас, к тому же у него есть свои собственные стили. Так же с HTML5 элементами <video> или <audio>. В этом и есть суть вебкомпонентов - создание простых и понятных независимых элементов со скрытой логикой, стилями.
+
+Наверняка, многие подключали в проект Bootstrap - для этого нужно отдельно прописать подгрузку стилей и скриптов. С компонентами это можно будет сделать проще:
+[code]<link rel="import" href="bootstrap.html"></link>[/code]
+
+Web Components - не фреймворк. Это набор технологий, реализованных на уровне браузера.
+
+## Web Components - поддержка браузерами & polyfills
+На данный момент (сентябрь 2015) 3 из 4 технологий находятся в стадии "Working Draft" на W3C (http://www.w3.org/standards/techs/components#w3c_all).
+И, конечно, технологии не поддерживаются всеми браузерами.
+Так как веб компоненты в перспективе имеют высокую ценность, но не всеми браузерами поддердиваются, то создаются способы улучшить поддержку. Так появились полифиллы https://github.com/webcomponents/webcomponentsjs#browser-support. Используя их, поддержка бреузерами уже получше.
+Подключается как обычно в head <script src="path/webcomponents.js"></script>
+
+## Web Components - ссылки
+http://www.w3.org/standards/techs/components#w3c_all - (eng) спецификация Web Components
+https://css-tricks.com/modular-future-web-components/ (eng) - обзор
+https://www.youtube.com/watch?v=fqULJBBEVQE - (eng) обзор
+http://webcomponents.org/ - (eng) обсуждения и лучшие практики
+https://github.com/webcomponents/webcomponentsjs - (eng) polyfills для поддержки старыми браузеров
+https://learn.javascript.ru/webcomponents - обучение
+https://developer.mozilla.org/en-US/docs/Web/Web_Components - (eng) обучение
+http://caniuse.com/#search=components - (eng) поддержка браузерами
+http://jonrimmer.github.io/are-we-componentized-yet/ - (eng) поддержка браузерами
+
+# Polymer
+
+Тем временем Google всё упрощает и развивает. Работа началась осенью 2012 года, судя по истории коммитов на github (https://github.com/Polymer/polymer/commit/0452ada044a6fc5818902e685fb07bb4678b2bc2). Они взяли веб компоненты, полифилы и создали еще одну надстройку.
+Цель Polymer - упростить создание качественных веб-приложений (со слов product manager'а с конференции Google IO).
+
+## Polymer - коротко
+Полимер из себя представляет вебкомпоненты в основе, полифилы для поддержки старых браузеров, это всё обёрнуто в целостную более удобную экосистему с добавлением сахара. <image src="assets/polymer.png">
+Google создал набор готовых компонент и разделил их на логические части:
+ - Iron Elements - Основные строительные блоки (<iron-icon>, <iron-input>, <iron-list>, ...)
+ - Paper Elements - Элементы на основе iron-elements и material design (<paper-input>, <paper-button>, <paper-tooltip>, ... )
+ - Google Web Components - Коллекция веб компонентов, использующих различные API Google (<google-analytics>, <google-chart>, <google-map>, ...)
+ - Gold Elements - Элементы, специфичные для интернет-коммерции (<gold-cc-input>, <gold-phone-input>, <gold-email-input>, ...)
+ - Neon Elements - Элементы для создания анимаций (<neon-animation>)
+ - Platinum Elements - Элементы, помогающие создать из веб-страницы настоящее веб приложение (<platinum-bluetooth-device>, <platinum-sw-cache>, <platinum-push-messaging>, ...)
+ - Molecules - Элементы-обёртки других библиотек/приложений (<marked-element>)
+Как Вы могли заметить, постоянно фигурирует слово "элемент". Google считает, что для всего есть элементы. "There is an element for that" - звучит как слоган в докладах Google IO 2015.
+Да, даже для ajax запроса есть элемент. Выглядит так: <iron-ajax url="<some url>" handle-as="json" on-response="onResponse"></iron-ajax>
+
+При создании приложений мы сталкиваемся с примерно одинаковыми задачами и Google предлагает набор готовых строительных блоков для этого. С какой проблемой бы мы не столкнулись - для её решения есть элемент. "There is an element for that".
+Есть каталог готовых Polymer-компонент http://elements.polymer.com.
+Polymer - это не фреймворк, так же как Web Components - не фреймворк. Polymer - это обёртка и сахар. Я бы идейно ее сравнил с jQuery. Но jQuery создана для работы с DOM, а Polymer для работы с Web Components.
+
+Далее, рассмотрим пример вебкомпонента и его Polymer-реализацию:
+
+Пример чистого веб-компонента:
+
+<template>
+    <span id="multiplier"></span> * <span id="multiplicand"></span> = <span id="result"></span>
+</template>
+
+<script>
+
+    (function(window, document) {
+        var ownerDocument =  (document._currentScript || document.currentScript).ownerDocument;
+        var template = ownerDocument.querySelector('template').content;
+        var elementPrototype = Object.create(HTMLElement.prototype);
+
+        var multiplier = 0, multiplicand = 0, result = 0;
+
+        elementPrototype.createdCallback = function() {
+            var shadowRoot = this.createShadowRoot();
+            var clone = document.importNode(template, true);
+            shadowRoot.appendChild(clone);
+
+            this.multiplier = shadowRoot.querySelector('#multiplier');
+            this.multiplicand = shadowRoot.querySelector('#multiplicand');
+            this.result = shadowRoot.querySelector('#result');
+
+            this.calculate();
+        };
+
+        elementPrototype.attributeChangedCallback = function(attr, oldVal, newVal) {
+            this.calculate();
+        };
+
+        elementPrototype.calculate = function(){
+            multiplier = parseFloat( this.getAttribute('multiplier') );
+            multiplicand = parseFloat( this.getAttribute('multiplicand') );
+            this.multiplier.textContent = multiplier;
+            this.multiplicand.textContent = multiplicand;
+            this.result.textContent = multiplicand*multiplier;
+        };
+        window.MyElement = document.registerElement('element-multiplier', {prototype: elementPrototype });
+    })(window, document);
+
+</script>
+
+Подключаем в <head> -> <link rel="import" href="element-multiplier.html">
+Используем на странице (в <body>) -> <element-multiplier multiplier="3" multiplicand="2"></element-multiplier>
+
+С Polymer будет выглядеть значительно понятней и проще:
+
+<link rel="import" href="polymer.html">
+
+<dom-module id="element-multiplier">
+    <template>
+        <span>{{multiplier}}</span> * <span>{{multiplicand}}</span> = <span>{{result}}</span>
+    </template>
+</dom-module>
+
+<script>
+    Polymer({
+        is: "element-multiplier",
+        properties: {
+            "multiplier"    : { type: Number, value: 0, observer: 'calculate' },
+            "multiplicand"  : { type: Number, value: 0, observer: 'calculate' },
+            "result"        : { type: Number, value: 0 }
+        },
+        ready: this.calculate,
+        calculate: function(){
+            this.result = this.multiplier*this.multiplicand;
+        }
+    });
+</script>
+
+Подключаем в <head> -> <link rel="import" href="path/element-multiplier.html"><script src="path/webcomponents.min.js"></script>
+Используем на странице (в <body>) -> <element-multiplier multiplier="3" multiplicand="2"></element-multiplier>
+
+## Polymer - тестируемость
+Да, он тестируемый и для этого создана отдельная утилита (https://github.com/Polymer/web-component-tester).
+Достаточно понятное описание. Пробовал. Работает.
+(при установке могут возникнуть проблемы с Java и Selenium)
+Необходимо установить web-component-tester: `npm install -g web-component-tester`
+Необходимо создать html с тестами (по-умолчанию, в папке `./test`):
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="path/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="path/web-component-tester/browser.js"></script>
+  <link rel="import" href="path/awesome-element.html">
+</head>
+<body>
+  <awesome-element id="fixture"></awesome-element>
+  <script>
+    suite('<awesome-element>', function() {
+      test('is awesomest', function() {
+        assert.isTrue(document.getElementById('fixture').awesomest);
+      });
+    });
+  </script>
+</body>
+</html>
+Далее запустить тесты: `wct`
+
+## Polymer - поддержка браузерами
+https://www.polymer-project.org/1.0/resources/compatibility.html
+<вставить табличку отсюда https://github.com/WebComponents/webcomponentsjs#browser-support>
+У меня так и не получилось запустить на старом android-телефоне.
+
+## Polymer - оптимизация vulcanize
+HTML imports позволяет быстро и удобно подключить документ в другой документ, но в этом удобстве скрывается и проблема производительности - создается множество http-запросов. Решение есть - соединить все подключаемые файлы в один. Для этого служит утилита vulcanize (https://github.com/polymer/vulcanize).
+Установка: `npm install -g vulcanize`
+Использование: `vulcanize index.html > build.html`
+
+## Polymer - starter kit
+Для удобства быстрого создания проектов есть утилита Polymer Starter Kit (https://github.com/PolymerElements/polymer-starter-kit). После установки сразу доступно множество полезной функциональности.
+
+## Polymer - альтернативы
+Polymer - это лишь надстройка над Web Components. Есть и другие подобные продукты:
+http://bosonic.github.io/
+http://x-tags.org/ (с поддержкой IE9)
+
+## Polymer - ссылки
+https://www.polymer-project.org/ - (eng) сайт проекта Polymer с описанием, уроками ...
+http://elements.polymer.com - (eng) - официальный каталог компонент
+https://github.com/polymer/vulcanize - (eng) оптимизатор
+https://github.com/PolymerElements/polymer-starter-kit - (eng) Polymer Starter Kit
+https://www.youtube.com/watch?v=0g0oOOT86NY - (eng) Google IO 2013
+https://www.youtube.com/watch?v=yRbOSdAe_JU - (eng) Google IO 2014
+https://www.youtube.com/watch?v=fD2As5RmM8Q - (eng) Google IO 2015
+http://www.sitepoint.com/introduction-to-web-components-and-polymer-tutorial/ - (eng) обучение
+https://aerotwist.com/blog/polymer-for-the-performance-obsessed/ - (eng) немного про оптимизацию и производительность
+https://www.polymer-project.org/1.0/resources/compatibility.html - (eng) поддержка браузерами
+http://bosonic.github.io/ - (eng) аналог Polymer
+http://x-tags.org/ - (eng) аналог Polymer
+
+## Polymer - немного про взаимодействие с библиотеками
+Вебкомпоненты будут внедрены в Angular 2: http://angularjs.blogspot.ru/2015/03/announcements-from-ng-conf-were.html (eng)
+
+Официальный представитель от React Sebastian Markbage (https://twitter.com/sebmarkbage) говорит, что они не будут использовать Web Components совместно с React, т.к. они идеологически разные (декларативный React против императивных Web Components): https://docs.google.com/document/d/1QZxArgMwidgCrAbuSikcB2iBxkffH6w0YB0C1qCsuH0/edit (eng)
+Однако, React и Web Components совместимы, в некоторых случаях есть преимущества: https://www.youtube.com/watch?v=g0TD0efcwVg (eng)
+
+Backbone & Web Components
+Удобно скрестить с уже готовыми компонентами (Polymer, X-Tags, Bosonic). Используются точно так же как и обычные html-элементы. http://webcomponents.org/presentations/webcomponents-plus-backbone-a-game-changing-combination-at-backbone-conf/ (eng)
+
+## Polymer - примеры
+http://www.pubnub.com/blog/creating-a-polymer-chat-app-with-material-design/ - (eng) создание приложения на Polymer
+https://translate.google.com/ - создан на Polymer
+http://todomvc.com/examples/polymer/index.html - пример TODO MVC на Polymer
+http://pubnub.github.io/paper-chat/ - анонимный чат на Polymer
+http://github.com/kashesandr/CIC - моё маленькое приложение. Идея проста: когда группа людей делают совместную покупку с одинаковыми вкладами, то часто возникает путаница в расчётах долгов, когда скидываются не все сразу. Писал специально для того, чтобы попробовать Polymer. Там есть рабочий пример тестов и vulcanize. Так же реализована минификация JS кода.
+
+# Спасибо!
+Удачи! Если есть ошибки или дополнения - пишите личным сообщением.
