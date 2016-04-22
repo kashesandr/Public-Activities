@@ -1,0 +1,48 @@
+{
+  "name": "web-testing",
+  "version": "0.0.1",
+  "description": "unit testing, integration testing for web",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node ./node_modules/.bin/selenium-standalone install",
+
+    "server": "node ./node_modules/.bin/http-server ./static -p 8081",
+    "build": "node ./node_modules/.bin/webpack --config webpack-conf.js",
+
+    "start": "npm run build && npm run server",
+    "selenium": "node ./node_modules/.bin/selenium-standalone start",
+
+    "test:unit": "node ./node_modules/.bin/karma start karma-conf.js --single-run --no-auto-watch",
+    "test:integration": "node ./node_modules/.bin/wdio ./wdio-conf.js",
+    "test:integration-cucumber": "./node_modules/.bin/wdio ./wdio-cucumber-conf.js",
+    "test:integration-browsers": "./node_modules/.bin/wdio ./wdio-browsers-conf.js",
+
+    "test": "npm run test:unit && npm run test:integration"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kashesandr/web-testing.git"
+  },
+  "keywords": [
+    "integration",
+    "unit",
+    "testing",
+    "js",
+    "webdriver"
+  ],
+  "author": "Aleksandr Kasheverov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kashesandr/web-testing/issues"
+  },
+  "homepage": "https://github.com/kashesandr/web-testing",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "mocha": "^2.4.5",
+    "selenium-standalone": "^5.1.0",
+    "wdio-cucumber-framework": "0.0.6",
+    "wdio-mocha-framework": "^0.2.12",
+    "webdriverio": "^4.0.5"
+  }
+}
